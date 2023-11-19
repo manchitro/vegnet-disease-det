@@ -15,7 +15,8 @@ from torch.utils.data import DataLoader
 from retinanet import coco_eval
 from retinanet import csv_eval
 
-assert torch.__version__.split('.')[0] == '1'
+print('pytorch version: {}'.format(torch.__version__))
+# assert torch.__version__.split('.')[0] == '1'
 
 print('CUDA available: {}'.format(torch.cuda.is_available()))
 
@@ -28,6 +29,7 @@ def main(args=None):
     parser.add_argument('--csv_train', help='Path to file containing training annotations (see readme)')
     parser.add_argument('--csv_classes', help='Path to file containing class list (see readme)')
     parser.add_argument('--csv_val', help='Path to file containing validation annotations (optional, see readme)')
+    parser.add_argument('--img_dir', help='Path to folder containing images')
 
     parser.add_argument('--depth', help='Resnet depth, must be one of 18, 34, 50, 101, 152', type=int, default=50)
     parser.add_argument('--epochs', help='Number of epochs', type=int, default=100)
@@ -48,19 +50,19 @@ def main(args=None):
     elif parser.dataset == 'csv':
 
         if parser.csv_train is None:
-            raise ValueError('Must provide --csv_train when training on COCO,')
+            raise ValueError('Must provide --csv_train when training on CSV,')
 
         if parser.csv_classes is None:
-            raise ValueError('Must provide --csv_classes when training on COCO,')
+            raise ValueError('Must provide --csv_classes when training on CSV,')
 
-        dataset_train = CSVDataset(train_file=parser.csv_train, class_list=parser.csv_classes,
+        dataset_train = CSVDataset(img_dir=parser.img_dir,train_file=parser.csv_train, class_list=parser.csv_classes,
                                    transform=transforms.Compose([Normalizer(), Augmenter(), Resizer()]))
 
         if parser.csv_val is None:
             dataset_val = None
             print('No validation annotations provided.')
         else:
-            dataset_val = CSVDataset(train_file=parser.csv_val, class_list=parser.csv_classes,
+            dataset_val = CSVDataset(img_dir=parser.img_dir,train_file=parser.csv_val, class_list=parser.csv_classes,
                                      transform=transforms.Compose([Normalizer(), Resizer()]))
 
     else:
@@ -107,14 +109,14 @@ def main(args=None):
     loss_hist = collections.deque(maxlen=500)
 
     retinanet.train()
-    retinanet.module.freeze_bn()
+    # retinanet.module.freeze_bn()
 
     print('Num training images: {}'.format(len(dataset_train)))
 
     for epoch_num in range(parser.epochs):
 
         retinanet.train()
-        retinanet.module.freeze_bn()
+        # retinanet.module.freeze_bn()
 
         epoch_loss = []
 

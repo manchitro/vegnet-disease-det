@@ -126,7 +126,7 @@ class CocoDataset(Dataset):
 class CSVDataset(Dataset):
     """CSV dataset."""
 
-    def __init__(self, train_file, class_list, transform=None):
+    def __init__(self, img_dir, train_file, class_list, transform=None):
         """
         Args:
             train_file (string): CSV file with training annotations
@@ -136,6 +136,7 @@ class CSVDataset(Dataset):
         self.train_file = train_file
         self.class_list = class_list
         self.transform = transform
+        self.img_dir = img_dir
 
         # parse the provided class file
         try:
@@ -166,7 +167,7 @@ class CSVDataset(Dataset):
         try:
             return function(value)
         except ValueError as e:
-            raise_from(ValueError(fmt.format(e)), None)
+            raise(ValueError(fmt.format(e)), None)
 
     def _open_for_csv(self, path):
         """
@@ -210,7 +211,7 @@ class CSVDataset(Dataset):
         return sample
 
     def load_image(self, image_index):
-        img = skimage.io.imread(self.image_names[image_index])
+        img = skimage.io.imread(os.path.join(self.img_dir, self.image_names[image_index]))
 
         if len(img.shape) == 2:
             img = skimage.color.gray2rgb(img)
@@ -255,9 +256,12 @@ class CSVDataset(Dataset):
             line += 1
 
             try:
-                img_file, x1, y1, x2, y2, class_name = row[:6]
+                # img_file, x1, y1, x2, y2, class_name = row[:6]
+                class_name, x1, y1, w, h, img_file = row[:6]
+                x2, y2 = int(x1) + int(w), int(y1) + int(h)
+                x2, y2 = str(x2), str(y2)
             except ValueError:
-                raise_from(ValueError('line {}: format should be \'img_file,x1,y1,x2,y2,class_name\' or \'img_file,,,,,\''.format(line)), None)
+                raise(ValueError('line {}: format should be \'img_file,x1,y1,x2,y2,class_name\' or \'img_file,,,,,\''.format(line)), None)
 
             if img_file not in result:
                 result[img_file] = []
@@ -294,7 +298,7 @@ class CSVDataset(Dataset):
         return max(self.classes.values()) + 1
 
     def image_aspect_ratio(self, image_index):
-        image = Image.open(self.image_names[image_index])
+        image = Image.open(os.path.join(self.img_dir, self.image_names[image_index]))
         return float(image.width) / float(image.height)
 
 
