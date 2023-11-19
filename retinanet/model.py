@@ -305,7 +305,7 @@ def resnet18(num_classes, pretrained=False, **kwargs):
     """
     model = ResNet(num_classes, BasicBlock, [2, 2, 2, 2], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['resnet18'], model_dir='.'), strict=False)
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet18'], model_dir='./pretrained_weights'), strict=False)
     return model
 
 
@@ -316,7 +316,7 @@ def resnet34(num_classes, pretrained=False, **kwargs):
     """
     model = ResNet(num_classes, BasicBlock, [3, 4, 6, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['resnet34'], model_dir='.'), strict=False)
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet34'], model_dir='./pretrained_weights'), strict=False)
     return model
 
 
@@ -327,7 +327,7 @@ def resnet50(num_classes, pretrained=False, **kwargs):
     """
     model = ResNet(num_classes, Bottleneck, [3, 4, 6, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['resnet50'], model_dir='.'), strict=False)
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet50'], model_dir='./pretrained_weights'), strict=False)
     return model
 
 
@@ -338,7 +338,7 @@ def resnet101(num_classes, pretrained=False, **kwargs):
     """
     model = ResNet(num_classes, Bottleneck, [3, 4, 23, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['resnet101'], model_dir='.'), strict=False)
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet101'], model_dir='./pretrained_weights'), strict=False)
     return model
 
 
@@ -349,5 +349,5 @@ def resnet152(num_classes, pretrained=False, **kwargs):
     """
     model = ResNet(num_classes, Bottleneck, [3, 8, 36, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['resnet152'], model_dir='.'), strict=False)
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet152'], model_dir='./pretrained_weights'), strict=False)
     return model

@@ -101,7 +101,12 @@ ENV/
 
 *.zip
 *.pt
+*.pth
+*.partial
 
 # images
 *.jpg
 *.jpeg
+
+# dolphin FM cache
+.directory

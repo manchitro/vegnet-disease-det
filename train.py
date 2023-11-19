@@ -1,3 +1,4 @@
+import os
 import argparse
 import collections
 
@@ -171,11 +172,11 @@ def main(args=None):
 
         scheduler.step(np.mean(epoch_loss))
 
-        torch.save(retinanet.module, '{}_retinanet_{}.pt'.format(parser.dataset, epoch_num))
+        torch.save(retinanet.module, os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt'))
 
     retinanet.eval()
 
-    torch.save(retinanet, 'model_final.pt')
+    torch.save(retinanet, os.path.join('saved_models', 'model_final.pt'))
 
 
 if __name__ == '__main__':
