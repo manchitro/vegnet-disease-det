@@ -16,6 +16,7 @@
                 "--csv_classes", "vegnet_annotations/labels.csv",
                 "--csv_train", "vegnet_annotations/vegnet-annots.csv",
                 "--img_dir", "vegnet_images",
+                "--depth", "18",
             ]
         }
     ]
