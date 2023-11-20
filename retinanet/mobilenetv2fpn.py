@@ -80,7 +80,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
         # Second layer
         self.second_layer = nn.Sequential(
             nn.Conv2d(
-                3, self.input_channel, kernel_size=3, stride=2, padding=1, bias=False
+                self.input_channel, self.input_channel, kernel_size=3, stride=2, padding=1, bias=False
             ),
             nn.BatchNorm2d(self.input_channel),
             nn.ReLU6(inplace=True),
