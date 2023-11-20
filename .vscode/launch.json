@@ -16,6 +16,7 @@
                 "--csv_train", "vegnet_annotations/vegnet-annots.csv",
                 "--img_dir", "vegnet_images",
                 "--model", "mobilenetv2",
+                // "--model", "resnet18",
             ]
         }
     ]

@@ -235,6 +235,8 @@ class ResNet(nn.Module):
         else:
             img_batch = inputs
 
+        print('img_batch.shape: ', img_batch.shape)
+
         x = self.conv1(img_batch)
         x = self.bn1(x)
         x = self.relu(x)
@@ -246,6 +248,9 @@ class ResNet(nn.Module):
         x4 = self.layer4(x3)
 
         features = self.fpn([x2, x3, x4])
+
+        for feature in features:
+            print('feature.shape: ', feature.shape)
 
         regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
 

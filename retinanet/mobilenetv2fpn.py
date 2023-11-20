@@ -203,6 +203,8 @@ class MobileNetV2_dynamicFPN(nn.Module):
         else:
             img_batch = inputs
 
+        print('img_batch.shape: ', img_batch.shape)
+
         # bottom up
         x = self.first_layer(img_batch)
 
@@ -234,13 +236,12 @@ class MobileNetV2_dynamicFPN(nn.Module):
             for smooth_layer, m_layer in zip(self.smooth_layers, m_layers)
         ]
 
-        regression = torch.cat(
-            [self.regressionModel(feature) for feature in features], dim=1
-        )
+        for feature in features:
+            print('feature.shape: ', feature.shape)
 
-        classification = torch.cat(
-            [self.classificationModel(feature) for feature in features], dim=1
-        )
+        regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
+
+        classification = torch.cat([self.classificationModel(feature) for feature in features], dim=1)
 
         anchors = self.anchors(img_batch)
 

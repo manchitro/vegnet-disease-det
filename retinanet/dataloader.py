@@ -152,17 +152,20 @@ class CSVDataset(Dataset):
             try:
                 # img_file, x1, y1, x2, y2, class_name = row[:6]
                 class_name, x1, y1, w, h, img_file = row[:6]
+
+                # add image to result list
+                if img_file not in result:
+                    result[img_file] = []
+
+                # If a row contains only an image path, it's an image without annotations.
+                if (x1, y1, w, h, class_name) == ('', '', '', '', ''):
+                    continue
+
                 x2, y2 = int(x1) + int(w), int(y1) + int(h)
                 x2, y2 = str(x2), str(y2)
             except ValueError:
                 raise(ValueError('line {}: format should be \'img_file,x1,y1,x2,y2,class_name\' or \'img_file,,,,,\''.format(line)), None)
 
-            if img_file not in result:
-                result[img_file] = []
-
-            # If a row contains only an image path, it's an image without annotations.
-            if (x1, y1, x2, y2, class_name) == ('', '', '', '', ''):
-                continue
 
             x1 = self._parse(x1, int, 'line {}: malformed x1: {{}}'.format(line))
             y1 = self._parse(y1, int, 'line {}: malformed y1: {{}}'.format(line))
