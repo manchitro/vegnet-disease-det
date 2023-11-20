@@ -235,7 +235,7 @@ class ResNet(nn.Module):
         else:
             img_batch = inputs
 
-        print('img_batch.shape: ', img_batch.shape)
+        # print('img_batch.shape: ', img_batch.shape)
 
         x = self.conv1(img_batch)
         x = self.bn1(x)
@@ -249,17 +249,17 @@ class ResNet(nn.Module):
 
         features = self.fpn([x2, x3, x4])
 
-        for feature in features:
-            print('feature.shape: ', feature.shape)
+        # for feature in features:
+            # print('feature.shape: ', feature.shape)
 
         regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
-        print('regression.shape: ', regression.shape)
+        # print('regression.shape: ', regression.shape)
 
         classification = torch.cat([self.classificationModel(feature) for feature in features], dim=1)
-        print('classification.shape: ', classification.shape)
+        # print('classification.shape: ', classification.shape)
 
         anchors = self.anchors(img_batch)
-        print('anchors.shape: ', anchors.shape)
+        # print('anchors.shape: ', anchors.shape)
 
         if self.training:
             return self.focalLoss(classification, regression, anchors, annotations)
