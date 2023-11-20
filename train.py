@@ -31,6 +31,7 @@ def main(args=None):
 
     parser.add_argument('--model', help='Backbone to use, must be one of resnet 18, 34, 50, 101, 152 or mobilenetv2', type=str, default='mobilenetv2')
     parser.add_argument('--epochs', help='Number of epochs', type=int, default=100)
+    parser.add_argument('--batchsize', help='Batch size', type=int, default=2)
 
     parser = parser.parse_args(args)
 
