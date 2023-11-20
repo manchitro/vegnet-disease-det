@@ -32,7 +32,7 @@ def main(args=None):
     parser.add_argument('--csv_val', help='Path to file containing validation annotations (optional, see readme)')
     parser.add_argument('--img_dir', help='Path to folder containing images')
 
-    parser.add_argument('--depth', help='Resnet depth, must be one of 18, 34, 50, 101, 152', type=int, default=50)
+    parser.add_argument('--model', help='Backbone to use, must be one of resnet 18, 34, 50, 101, 152 or mobilenetv2', type=str, default='mobilenetv2')
     parser.add_argument('--epochs', help='Number of epochs', type=int, default=100)
 
     parser = parser.parse_args(args)
@@ -77,16 +77,18 @@ def main(args=None):
         dataloader_val = DataLoader(dataset_val, num_workers=3, collate_fn=collater, batch_sampler=sampler_val)
 
     # Create the model
-    if parser.depth == 18:
-        retinanet = model.resnet18(num_classes=dataset_train.num_classes(), pretrained=True)
-    elif parser.depth == 34:
-        retinanet = model.resnet34(num_classes=dataset_train.num_classes(), pretrained=True)
-    elif parser.depth == 50:
-        retinanet = model.resnet50(num_classes=dataset_train.num_classes(), pretrained=True)
-    elif parser.depth == 101:
-        retinanet = model.resnet101(num_classes=dataset_train.num_classes(), pretrained=True)
-    elif parser.depth == 152:
-        retinanet = model.resnet152(num_classes=dataset_train.num_classes(), pretrained=True)
+    if parser.model == 'resnet18':
+        network = model.resnet18(num_classes=dataset_train.num_classes(), pretrained=True)
+    elif parser.model == 'resnet34':
+        network = model.resnet34(num_classes=dataset_train.num_classes(), pretrained=True)
+    elif parser.model == 'resnet50':
+        network = model.resnet50(num_classes=dataset_train.num_classes(), pretrained=True)
+    elif parser.model == 'resnet101':
+        network = model.resnet101(num_classes=dataset_train.num_classes(), pretrained=True)
+    elif parser.model == 'resnet152':
+        network = model.resnet152(num_classes=dataset_train.num_classes(), pretrained=True)
+    elif parser.model == 'mobilenetv2':
+        network = model.mobilenetv2(num_classes=dataset_train.num_classes(), pretrained=True)
     else:
         raise ValueError('Unsupported model depth, must be one of 18, 34, 50, 101, 152')
 
@@ -94,29 +96,29 @@ def main(args=None):
 
     if use_gpu:
         if torch.cuda.is_available():
-            retinanet = retinanet.cuda()
+            network = network.cuda()
 
     if torch.cuda.is_available():
-        retinanet = torch.nn.DataParallel(retinanet).cuda()
+        network = torch.nn.DataParallel(network).cuda()
     else:
-        retinanet = torch.nn.DataParallel(retinanet)
+        network = torch.nn.DataParallel(network)
 
-    retinanet.training = True
+    network.training = True
 
-    optimizer = optim.Adam(retinanet.parameters(), lr=1e-5)
+    optimizer = optim.Adam(network.parameters(), lr=1e-5)
 
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, verbose=True)
 
     loss_hist = collections.deque(maxlen=500)
 
-    retinanet.train()
+    network.train()
     # retinanet.module.freeze_bn()
 
     print('Num training images: {}'.format(len(dataset_train)))
 
     for epoch_num in range(parser.epochs):
 
-        retinanet.train()
+        network.train()
         # retinanet.module.freeze_bn()
 
         epoch_loss = []
@@ -126,9 +128,9 @@ def main(args=None):
                 optimizer.zero_grad()
 
                 if torch.cuda.is_available():
-                    classification_loss, regression_loss = retinanet([data['img'].cuda().float(), data['annot']])
+                    classification_loss, regression_loss = network([data['img'].cuda().float(), data['annot']])
                 else:
-                    classification_loss, regression_loss = retinanet([data['img'].float(), data['annot']])
+                    classification_loss, regression_loss = network([data['img'].float(), data['annot']])
                     
                 classification_loss = classification_loss.mean()
                 regression_loss = regression_loss.mean()
@@ -140,7 +142,7 @@ def main(args=None):
 
                 loss.backward()
 
-                torch.nn.utils.clip_grad_norm_(retinanet.parameters(), 0.1)
+                torch.nn.utils.clip_grad_norm_(network.parameters(), 0.1)
 
                 optimizer.step()
 
@@ -162,21 +164,21 @@ def main(args=None):
 
             print('Evaluating dataset')
 
-            coco_eval.evaluate_coco(dataset_val, retinanet)
+            coco_eval.evaluate_coco(dataset_val, network)
 
         elif parser.dataset == 'csv' and parser.csv_val is not None:
 
             print('Evaluating dataset')
 
-            mAP = csv_eval.evaluate(dataset_val, retinanet)
+            mAP = csv_eval.evaluate(dataset_val, network)
 
         scheduler.step(np.mean(epoch_loss))
 
-        torch.save(retinanet.module, os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt'))
+        torch.save(network.module, os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt'))
 
-    retinanet.eval()
+    network.eval()
 
-    torch.save(retinanet, os.path.join('saved_models', 'model_final.pt'))
+    torch.save(network, os.path.join('saved_models', 'model_final.pt'))
 
 
 if __name__ == '__main__':
