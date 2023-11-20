@@ -12,7 +12,6 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "--dataset", "csv",
                 "--csv_classes", "vegnet_annotations/labels.csv",
                 "--csv_train", "vegnet_annotations/vegnet-annots.csv",
                 "--img_dir", "vegnet_images",
