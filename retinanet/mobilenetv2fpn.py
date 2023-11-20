@@ -212,11 +212,13 @@ class MobileNetV2_dynamicFPN(nn.Module):
         else:
             img_batch = inputs
 
-        # print('img_batch.shape: ', img_batch.shape)
+        print('img_batch.shape: ', img_batch.shape)
 
         # bottom up
         x = self.first_layer(img_batch)
+        print('x.shape: ', x.shape)
         x = self.second_layer(x)
+        print('x.shape: ', x.shape)
 
         # loop through inverted_residual_blocks (mobile_netV2)
         # save lateral_connections to lateral_tensors
@@ -246,17 +248,17 @@ class MobileNetV2_dynamicFPN(nn.Module):
             for smooth_layer, m_layer in zip(self.smooth_layers, m_layers)
         ]
 
-        # for feature in features:
-            # print('feature.shape: ', feature.shape)
+        for feature in features:
+            print('feature.shape: ', feature.shape)
 
         regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
-        # print('regression.shape: ', regression.shape)
+        print('regression.shape: ', regression.shape)
 
         classification = torch.cat([self.classificationModel(feature) for feature in features], dim=1)
-        # print('classification.shape: ', classification.shape)
+        print('classification.shape: ', classification.shape)
 
         anchors = self.anchors(img_batch)
-        # print('anchors.shape: ', anchors.shape)
+        print('anchors.shape: ', anchors.shape)
 
         if self.training:
             return self.focalLoss(classification, regression, anchors, annotations)
