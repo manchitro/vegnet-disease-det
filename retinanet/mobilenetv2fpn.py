@@ -240,10 +240,13 @@ class MobileNetV2_dynamicFPN(nn.Module):
             print('feature.shape: ', feature.shape)
 
         regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
+        print('regression.shape: ', regression.shape)
 
         classification = torch.cat([self.classificationModel(feature) for feature in features], dim=1)
+        print('classification.shape: ', classification.shape)
 
         anchors = self.anchors(img_batch)
+        print('anchors.shape: ', anchors.shape)
 
         if self.training:
             return self.focalLoss(classification, regression, anchors, annotations)
