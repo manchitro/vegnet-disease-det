@@ -77,6 +77,15 @@ class MobileNetV2_dynamicFPN(nn.Module):
             nn.ReLU6(inplace=True),
         )
 
+        # Second layer
+        self.second_layer = nn.Sequential(
+            nn.Conv2d(
+                3, self.input_channel, kernel_size=3, stride=2, padding=1, bias=False
+            ),
+            nn.BatchNorm2d(self.input_channel),
+            nn.ReLU6(inplace=True),
+        )
+
         # Inverted residual blocks (each n layers)
         self.inverted_residual_setting = [
             {"expansion_factor": 1, "width_factor": 16, "n": 1, "stride": 1},
@@ -207,6 +216,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
 
         # bottom up
         x = self.first_layer(img_batch)
+        x = self.second_layer(x)
 
         # loop through inverted_residual_blocks (mobile_netV2)
         # save lateral_connections to lateral_tensors
