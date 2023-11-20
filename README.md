@@ -101,29 +101,26 @@ Images with multiple bounding boxes should use one row per bounding box.
 Note that indexing for pixel values starts at 0.
 The expected format of each line is:
 ```
-path/to/image.jpg,x1,y1,x2,y2,class_name
+class_name, x1, y1, w, h, img_path
 ```
 
 Some images may not contain any labeled objects.
 To add these images to the dataset as negative examples,
-add an annotation where `x1`, `y1`, `x2`, `y2` and `class_name` are all empty:
+add an annotation where `class_name`, `x1`, `y1`, `w`, `h` are all empty:
 ```
-path/to/image.jpg,,,,,
+, , , , , img_path
 ```
 
 A full example:
 ```
-/data/imgs/img_001.jpg,837,346,981,456,cow
-/data/imgs/img_002.jpg,215,312,279,391,cat
-/data/imgs/img_002.jpg,22,5,89,84,bird
-/data/imgs/img_003.jpg,,,,,
+Bacterial Spot Rot,1763,779,657,849,Bacterial Spot. (100).jpg
+Bacterial Spot Rot,1913,442,1087,1000,Bacterial Spot. (101).jpg
+Bacterial Spot Rot,223,1093,2062,1845,Bacterial Spot. (101).jpg
 ```
 
 This defines a dataset with 3 images.
-`img_001.jpg` contains a cow.
-`img_002.jpg` contains a cat and a bird.
-`img_003.jpg` contains no interesting objects/animals.
-
+`Bacterial Spot. (100).jpg` contains one instance of Bacterial Spot Rot.
+`Bacterial Spot. (101).jpg` contains two instances of Bacterial Spot Rot.
 
 ### Class mapping format
 The class name to ID mapping file should contain one mapping per line.
