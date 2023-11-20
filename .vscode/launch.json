@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "train.py",
             "console": "integratedTerminal",
-            "justMyCode": true,
+            "justMyCode": false,
             "args": [
                 "--dataset", "csv",
                 "--csv_classes", "vegnet_annotations/labels.csv",

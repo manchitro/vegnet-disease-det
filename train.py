@@ -8,7 +8,7 @@ import torch
 import torch.optim as optim
 from torchvision import transforms
 
-from retinanet import model
+from retinanet import mobilenetv2fpn, resnetsfpn
 from retinanet.dataloader import CocoDataset, CSVDataset, collater, Resizer, AspectRatioBasedSampler, Augmenter, \
     Normalizer
 from torch.utils.data import DataLoader
@@ -78,19 +78,19 @@ def main(args=None):
 
     # Create the model
     if parser.model == 'resnet18':
-        network = model.resnet18(num_classes=dataset_train.num_classes(), pretrained=True)
+        network = resnetsfpn.resnet18(num_classes=dataset_train.num_classes(), pretrained=True)
     elif parser.model == 'resnet34':
-        network = model.resnet34(num_classes=dataset_train.num_classes(), pretrained=True)
+        network = resnetsfpn.resnet34(num_classes=dataset_train.num_classes(), pretrained=True)
     elif parser.model == 'resnet50':
-        network = model.resnet50(num_classes=dataset_train.num_classes(), pretrained=True)
+        network = resnetsfpn.resnet50(num_classes=dataset_train.num_classes(), pretrained=True)
     elif parser.model == 'resnet101':
-        network = model.resnet101(num_classes=dataset_train.num_classes(), pretrained=True)
+        network = resnetsfpn.resnet101(num_classes=dataset_train.num_classes(), pretrained=True)
     elif parser.model == 'resnet152':
-        network = model.resnet152(num_classes=dataset_train.num_classes(), pretrained=True)
+        network = resnetsfpn.resnet152(num_classes=dataset_train.num_classes(), pretrained=True)
     elif parser.model == 'mobilenetv2':
-        network = model.mobilenetv2(num_classes=dataset_train.num_classes(), pretrained=True)
+        network = mobilenetv2fpn.mobilenetv2FPN(num_classes=dataset_train.num_classes(), pretrained=False)
     else:
-        raise ValueError('Unsupported model depth, must be one of 18, 34, 50, 101, 152')
+        raise ValueError('Unsupported model, must be one of resnet 18, 34, 50, 101, 152 or mobilenetv2')
 
     use_gpu = True
 
