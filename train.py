@@ -51,7 +51,7 @@ def main(args=None):
         dataset_val = CSVDataset(img_dir=parser.img_dir,train_file=parser.csv_val, class_list=parser.csv_classes,
                                     transform=transforms.Compose([Normalizer(), Resizer()]))
 
-    sampler = AspectRatioBasedSampler(dataset_train, batch_size=2, drop_last=False)
+    sampler = AspectRatioBasedSampler(dataset_train, batch_size=parser.batchsize, drop_last=False)
     dataloader_train = DataLoader(dataset_train, num_workers=3, collate_fn=collater, batch_sampler=sampler)
 
     if dataset_val is not None:
