@@ -75,16 +75,16 @@ def main(args=None):
     else:
         raise ValueError('Unsupported model, must be one of resnet 18, 34, 50, 101, 152 or mobilenetv2')
 
-    use_gpu = False
+    use_gpu = True
 
     if use_gpu:
-        if torch.cuda.is_available() and False:
+        if torch.cuda.is_available():
             network = network.cuda()
 
-    # if torch.cuda.is_available() and False:
-    #     network = torch.nn.DataParallel(network).cuda()
-    # else:
-    #     network = torch.nn.DataParallel(network)
+    if torch.cuda.is_available():
+        network = torch.nn.DataParallel(network).cuda()
+    else:
+        network = torch.nn.DataParallel(network)
 
     network.training = True
     # print(network)
@@ -111,7 +111,7 @@ def main(args=None):
             try:
                 optimizer.zero_grad()
 
-                if torch.cuda.is_available() and False:
+                if torch.cuda.is_available():
                     classification_loss, regression_loss = network([data['img'].cuda().float(), data['annot']])
                 else:
                     classification_loss, regression_loss = network([data['img'].float(), data['annot']])

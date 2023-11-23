@@ -202,11 +202,11 @@ class MobileNetV2_dynamicFPN(nn.Module):
         else:
             img_batch = inputs
 
-        print('img_batch.shape: ', img_batch.shape)
+        # print('img_batch.shape: ', img_batch.shape)
 
         # bottom up
         x = self.first_layer(img_batch)
-        print('x.shape: ', x.shape)
+        # print('x.shape: ', x.shape)
 
         # loop through inverted_residual_blocks (mobile_netV2)
         # save lateral_connections to lateral_tensors
@@ -234,22 +234,22 @@ class MobileNetV2_dynamicFPN(nn.Module):
             for m_layer in m_layers
         ]
 
-        feature_sum = 0
-        for feature in features:
-            print('feature.shape: ', feature.shape)
-            feature_sum += feature.shape[2] * feature.shape[3]
+        # feature_sum = 0
+        # for feature in features:
+        #     print('feature.shape: ', feature.shape)
+        #     feature_sum += feature.shape[2] * feature.shape[3]
 
-        print('no. of features: ', feature_sum)
-        print('no. of anchors: ', feature_sum*9)
+        # print('no. of features: ', feature_sum)
+        # print('no. of anchors: ', feature_sum*9)
 
         regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
-        print('regression.shape: ', regression.shape)
+        # print('regression.shape: ', regression.shape)
 
         classification = torch.cat([self.classificationModel(feature) for feature in features], dim=1)
-        print('classification.shape: ', classification.shape)
+        # print('classification.shape: ', classification.shape)
 
         anchors = self.anchors(img_batch)
-        print('anchors.shape: ', anchors.shape)
+        # print('anchors.shape: ', anchors.shape)
 
         if self.training:
             return self.focalLoss(classification, regression, anchors, annotations)
@@ -263,7 +263,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
             finalAnchorBoxesIndexes = torch.Tensor([]).long()
             finalAnchorBoxesCoordinates = torch.Tensor([])
 
-            if torch.cuda.is_available() and False:
+            if torch.cuda.is_available():
                 finalScores = finalScores.cuda()
                 finalAnchorBoxesIndexes = finalAnchorBoxesIndexes.cuda()
                 finalAnchorBoxesCoordinates = finalAnchorBoxesCoordinates.cuda()
@@ -288,7 +288,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
                 finalAnchorBoxesIndexesValue = torch.tensor(
                     [i] * anchors_nms_idx.shape[0]
                 )
-                if torch.cuda.is_available() and False:
+                if torch.cuda.is_available():
                     finalAnchorBoxesIndexesValue = finalAnchorBoxesIndexesValue.cuda()
 
                 finalAnchorBoxesIndexes = torch.cat(
