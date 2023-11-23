@@ -6,6 +6,7 @@ import numpy as np
 
 import torch
 import torch.optim as optim
+from torchsummary import summary
 from torchvision import transforms
 
 from retinanet import mobilenetv2fpn, resnetsfpn
@@ -74,18 +75,19 @@ def main(args=None):
     else:
         raise ValueError('Unsupported model, must be one of resnet 18, 34, 50, 101, 152 or mobilenetv2')
 
-    use_gpu = True
+    use_gpu = False
 
     if use_gpu:
-        if torch.cuda.is_available():
+        if torch.cuda.is_available() and False:
             network = network.cuda()
 
-    if torch.cuda.is_available():
-        network = torch.nn.DataParallel(network).cuda()
-    else:
-        network = torch.nn.DataParallel(network)
+    # if torch.cuda.is_available() and False:
+    #     network = torch.nn.DataParallel(network).cuda()
+    # else:
+    #     network = torch.nn.DataParallel(network)
 
     network.training = True
+    # print(network)
 
     optimizer = optim.Adam(network.parameters(), lr=1e-5)
 
@@ -109,7 +111,7 @@ def main(args=None):
             try:
                 optimizer.zero_grad()
 
-                if torch.cuda.is_available():
+                if torch.cuda.is_available() and False:
                     classification_loss, regression_loss = network([data['img'].cuda().float(), data['annot']])
                 else:
                     classification_loss, regression_loss = network([data['img'].float(), data['annot']])

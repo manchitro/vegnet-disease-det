@@ -8,11 +8,12 @@ class Anchors(nn.Module):
         super(Anchors, self).__init__()
 
         if pyramid_levels is None:
-            self.pyramid_levels = [3, 4, 5, 6, 7]
+            self.pyramid_levels = [2, 3, 4, 5, 6]
         if strides is None:
             self.strides = [2 ** x for x in self.pyramid_levels]
         if sizes is None:
             self.sizes = [2 ** (x + 2) for x in self.pyramid_levels]
+            self.sizes.reverse()
         if ratios is None:
             self.ratios = np.array([0.5, 1, 2])
         if scales is None:
@@ -34,7 +35,7 @@ class Anchors(nn.Module):
 
         all_anchors = np.expand_dims(all_anchors, axis=0)
 
-        if torch.cuda.is_available():
+        if torch.cuda.is_available() and False:
             return torch.from_numpy(all_anchors.astype(np.float32)).cuda()
         else:
             return torch.from_numpy(all_anchors.astype(np.float32))

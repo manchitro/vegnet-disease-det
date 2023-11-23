@@ -84,7 +84,7 @@ class BBoxTransform(nn.Module):
     def __init__(self, mean=None, std=None):
         super(BBoxTransform, self).__init__()
         if mean is None:
-            if torch.cuda.is_available():
+            if torch.cuda.is_available() and False:
                 self.mean = torch.from_numpy(np.array([0, 0, 0, 0]).astype(np.float32)).cuda()
             else:
                 self.mean = torch.from_numpy(np.array([0, 0, 0, 0]).astype(np.float32))
@@ -92,7 +92,7 @@ class BBoxTransform(nn.Module):
         else:
             self.mean = mean
         if std is None:
-            if torch.cuda.is_available():
+            if torch.cuda.is_available() and False:
                 self.std = torch.from_numpy(np.array([0.1, 0.1, 0.2, 0.2]).astype(np.float32)).cuda()
             else:
                 self.std = torch.from_numpy(np.array([0.1, 0.1, 0.2, 0.2]).astype(np.float32))

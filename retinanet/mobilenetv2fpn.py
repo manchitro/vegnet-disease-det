@@ -77,15 +77,6 @@ class MobileNetV2_dynamicFPN(nn.Module):
             nn.ReLU6(inplace=True),
         )
 
-        # Second layer
-        self.second_layer = nn.Sequential(
-            nn.Conv2d(
-                self.input_channel, self.input_channel, kernel_size=3, stride=2, padding=1, bias=False
-            ),
-            nn.BatchNorm2d(self.input_channel),
-            nn.ReLU6(inplace=True),
-        )
-
         # Inverted residual blocks (each n layers)
         self.inverted_residual_setting = [
             {"expansion_factor": 1, "width_factor": 16, "n": 1, "stride": 1},
@@ -94,7 +85,8 @@ class MobileNetV2_dynamicFPN(nn.Module):
             {"expansion_factor": 6, "width_factor": 64, "n": 4, "stride": 2},
             {"expansion_factor": 6, "width_factor": 96, "n": 3, "stride": 1},
             {"expansion_factor": 6, "width_factor": 160, "n": 3, "stride": 2},
-            {"expansion_factor": 6, "width_factor": 320, "n": 1, "stride": 1},
+            {"expansion_factor": 6, "width_factor": 240, "n": 2, "stride": 2}, # addded extra downsampling layer
+            # {"expansion_factor": 6, "width_factor": 320, "n": 1, "stride": 1}, # remove last residual block
         ]
         self.inverted_residual_blocks = nn.ModuleList(
             [
@@ -122,7 +114,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
         # build layer only if resulution has decreases (stride > 1)
         self.lateral_setting = [
             setting
-            for setting in self.inverted_residual_setting[:-1]
+            for setting in self.inverted_residual_setting
             if setting["stride"] > 1
         ]
         self.lateral_layers = nn.ModuleList(
@@ -140,10 +132,8 @@ class MobileNetV2_dynamicFPN(nn.Module):
 
         # Smooth layers
         # n = lateral layers + 1 for top layer
-        self.smooth_layers = nn.ModuleList(
-            [nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)]
-            * (len(self.lateral_layers) + 1)
-        )
+
+        self.smooth_layer = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)
 
         # Number of classes for prediction
         self.num_classes = num_classes
@@ -189,7 +179,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
 
     def _upsample_add(self, x, y):
         _, _, H, W = y.size()
-        return F.upsample(x, size=(H, W), mode="bilinear", align_corners=False) + y
+        return F.interpolate(x, size=(H, W), mode="bilinear", align_corners=False) + y
 
     def _initialize_weights(self):
         for m in self.modules():
@@ -217,8 +207,6 @@ class MobileNetV2_dynamicFPN(nn.Module):
         # bottom up
         x = self.first_layer(img_batch)
         print('x.shape: ', x.shape)
-        x = self.second_layer(x)
-        print('x.shape: ', x.shape)
 
         # loop through inverted_residual_blocks (mobile_netV2)
         # save lateral_connections to lateral_tensors
@@ -232,24 +220,27 @@ class MobileNetV2_dynamicFPN(nn.Module):
                 n_lateral_connections += 1
             x = output
 
-        x = self.average_pool(x)
-
-        # connect m_layer with previous m_layer and lateral layers recursively
-        m_layers = [self.top_layer(x)]
         # reverse lateral tensor order for top down
         lateral_tensors.reverse()
-        for lateral_tensor in lateral_tensors:
+        # connect m_layer with previous m_layer and lateral layers recursively
+        m_layers = [lateral_tensors[0]]
+
+        for lateral_tensor in lateral_tensors[1:]:
             m_layers.append(self._upsample_add(m_layers[-1], lateral_tensor))
 
         # smooth all m_layers
-        assert len(self.smooth_layers) == len(m_layers)
         features = [
-            smooth_layer(m_layer)
-            for smooth_layer, m_layer in zip(self.smooth_layers, m_layers)
+            self.smooth_layer(m_layer)
+            for m_layer in m_layers
         ]
 
+        feature_sum = 0
         for feature in features:
             print('feature.shape: ', feature.shape)
+            feature_sum += feature.shape[2] * feature.shape[3]
+
+        print('no. of features: ', feature_sum)
+        print('no. of anchors: ', feature_sum*9)
 
         regression = torch.cat([self.regressionModel(feature) for feature in features], dim=1)
         print('regression.shape: ', regression.shape)
@@ -272,7 +263,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
             finalAnchorBoxesIndexes = torch.Tensor([]).long()
             finalAnchorBoxesCoordinates = torch.Tensor([])
 
-            if torch.cuda.is_available():
+            if torch.cuda.is_available() and False:
                 finalScores = finalScores.cuda()
                 finalAnchorBoxesIndexes = finalAnchorBoxesIndexes.cuda()
                 finalAnchorBoxesCoordinates = finalAnchorBoxesCoordinates.cuda()
@@ -297,7 +288,7 @@ class MobileNetV2_dynamicFPN(nn.Module):
                 finalAnchorBoxesIndexesValue = torch.tensor(
                     [i] * anchors_nms_idx.shape[0]
                 )
-                if torch.cuda.is_available():
+                if torch.cuda.is_available() and False:
                     finalAnchorBoxesIndexesValue = finalAnchorBoxesIndexesValue.cuda()
 
                 finalAnchorBoxesIndexes = torch.cat(
@@ -345,9 +336,8 @@ class RegressionModel(nn.Module):
 
         # out is B x C x W x H, with C = 4*num_anchors
         out = out.permute(0, 2, 3, 1)
-
-        return out.contiguous().view(out.shape[0], -1, 4)
-
+        out = out.contiguous().view(out.shape[0], -1, 4)
+        return out
 
 class ClassificationModel(nn.Module):
     def __init__(
@@ -403,12 +393,14 @@ class ClassificationModel(nn.Module):
 
         out2 = out1.view(batch_size, width, height, self.num_anchors, self.num_classes)
 
-        return out2.contiguous().view(x.shape[0], -1, self.num_classes)
+        out3 = out2.contiguous().view(x.shape[0], -1, self.num_classes)
+
+        return out3
 
 
 def mobilenetv2FPN(num_classes, pretrained=False, **kwargs):
     """Constructs a MobileNetV2 backbone FPN model."""
-    model = MobileNetV2_dynamicFPN(num_classes, **kwargs)
+    model = MobileNetV2_dynamicFPN(num_classes=num_classes, **kwargs)
     # model.to(torch.device("cuda"))
 
     if pretrained:
