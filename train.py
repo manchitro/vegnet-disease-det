@@ -99,6 +99,8 @@ def main(args=None):
     # retinanet.module.freeze_bn()
 
     print('Num training images: {}'.format(len(dataset_train)))
+    if dataset_val:
+        print('Num validation images: {}'.format(len(dataset_val)))       
 
     for epoch_num in range(parser.epochs):
 
