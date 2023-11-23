@@ -28,8 +28,8 @@ def load_classes(csv_reader):
 # Draws a caption above the box in an image
 def draw_caption(image, box, caption):
     b = np.array(box).astype(int)
-    cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 2)
-    cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 1)
+    cv2.putText(image, caption, (b[0] + 20, b[1] + 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 2)
+    cv2.putText(image, caption, (b[0] + 20, b[1] + 20), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 1)
 
 
 def detect_image(image_path, model_path, class_list):
@@ -115,7 +115,7 @@ def detect_image(image_path, model_path, class_list):
                 draw_caption(image_orig, (x1, y1, x2, y2), caption)
                 cv2.rectangle(image_orig, (x1, y1), (x2, y2), color=(0, 0, 255), thickness=2)
 
-            cv2.imshow('detections', image_orig)
+            cv2.imwrite('image_orig.jpg', image_orig)
             cv2.waitKey(0)
 
 
