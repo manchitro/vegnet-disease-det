@@ -13,11 +13,12 @@
             "justMyCode": false,
             "args": [
                 "--csv_classes", "vegnet_annotations/labels.csv",
-                "--csv_train", "vegnet_annotations/vegnet-annots.csv",
+                "--csv_train", "vegnet_annotations/vegnet-annots-train.csv",
+                "--csv_val", "vegnet_annotations/vegnet-annots-val.csv",
                 "--img_dir", "vegnet_images",
-                "--model", "mobilenetv2",
-                // "--model", "resnet18",
-                "--batchsize", "8",
+                // "--model", "mobilenetv2",
+                "--model", "resnet18",
+                "--batchsize", "4",
             ]
         }
     ]

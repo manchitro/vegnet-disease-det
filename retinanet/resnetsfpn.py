@@ -4,7 +4,7 @@ import math
 import torch.utils.model_zoo as model_zoo
 from torchvision.ops import nms
 from retinanet.utils import BasicBlock, Bottleneck, BBoxTransform, ClipBoxes
-from retinanet.anchors import Anchors
+from retinanet.anchors_resnet import Anchors
 from retinanet import losses
 
 model_urls = {
