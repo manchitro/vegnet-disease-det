@@ -37,7 +37,7 @@ def main(args=None):
         os.makedirs(val_out_dir)
 
 	# Save eval history
-    eval_history_cols = ['epoch', 'label', 'eval_mAP', 'eval_precision', 'eval_recall']
+    eval_history_cols = ['epoch', 'label', 'tp', 'fp', 'eval_mAP', 'eval_precision', 'eval_recall']
     eval_csv_file_path = os.path.join(val_out_dir, 'eval_history.csv')
     with open(eval_csv_file_path, 'w', newline='') as file:
         writer = csv.writer(file)

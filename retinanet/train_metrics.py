@@ -158,13 +158,12 @@ def evaluate(
     max_detections=100,
     save_path=None,
     csv_file_path=None,
-	epoch=0
+    epoch=0
 ):
     """ Evaluate a given dataset using a given retinanet.
     # Arguments
         generator       : The generator that represents the dataset to evaluate.
-        retinanet           : The retinanet to evaluate.
-        iou_threshold   : The threshold used to consider when a detection is positive or negative.
+        retinanet           : The retinanet to evaluate.  iou_threshold   : The threshold used to consider when a detection is positive or negative.
         score_threshold : The score confidence threshold to use for detections.
         max_detections  : The maximum number of detections to use per image.
         save_path       : The path to save precision recall curve of each label.
@@ -257,19 +256,6 @@ def evaluate(
                 recall[-1] if len(recall) > 0 else 'N/A'
             ])
             # eval_history_cols = ['epoch', 'label', 'tp', 'fp', 'eval_mAP', 'eval_precision', 'eval_recall']
-        
-        if save_path!=None:
-            plt.plot(recall,precision)
-            # naming the x axis 
-            plt.xlabel('Recall') 
-            # naming the y axis 
-            plt.ylabel('Precision') 
-
-            # giving a title to my graph 
-            plt.title('Precision Recall curve') 
-
-            # function to show the plot
-            plt.savefig(os.path.join(save_path, label_name+'_precision_recall.jpg'))
 
     return average_precisions
 
