@@ -3,6 +3,7 @@ from __future__ import print_function
 import numpy as np
 import json
 import os
+import csv
 import matplotlib.pyplot as plt
 import torch
 
@@ -155,7 +156,9 @@ def evaluate(
     iou_threshold=0.5,
     score_threshold=0.05,
     max_detections=100,
-    save_path=None
+    save_path=None,
+    csv_file_path=None,
+	epoch=0
 ):
     """ Evaluate a given dataset using a given retinanet.
     # Arguments
@@ -237,8 +240,13 @@ def evaluate(
     for label in range(generator.num_classes()):
         label_name = generator.label_to_name(label)
         print('{}: {}'.format(label_name, average_precisions[label][0]))
-        print("Precision: ",precision[-1])
-        print("Recall: ",recall[-1])
+        print("Precision: ",precision[-1] if precision else 'N/A')
+        print("Recall: ",recall[-1] if recall else 'N/A')
+
+        with open(csv_file_path, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([epoch, label_name, average_precisions[label][0], precision[-1] if precision else 'N/A', recall[-1] if recall else 'N/A'])
+			# eval_history_cols = ['epoch', 'label', 'eval_mAP', 'eval_precision', 'eval_recall']
         
         if save_path!=None:
             plt.plot(recall,precision)
@@ -252,8 +260,6 @@ def evaluate(
 
             # function to show the plot
             plt.savefig(os.path.join(save_path, label_name+'_precision_recall.jpg'))
-
-
 
     return average_precisions
 

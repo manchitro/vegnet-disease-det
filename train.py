@@ -1,4 +1,6 @@
 import os
+import csv
+import datetime
 import argparse
 import collections
 
@@ -38,13 +40,42 @@ def main(args=None):
 
     parser = parser.parse_args(args)
 
-    if parser.csv_train is None:
-        raise ValueError('Must provide --csv_train when training on CSV,')
-
     if parser.debug:
         print('Debug mode is on')
         parser.csv_train = 'small_' + parser.csv_train
         parser.csv_val = 'small_' + parser.csv_val
+
+    if not os.path.exists('out'):
+        os.makedirs('out')
+
+    current_time = datetime.datetime.now()
+    time_string = current_time.strftime("%Y-%m-%d_%H:%M:%S")
+    timestamp = str(time_string)
+
+    exp_out_dir = 'out/{}_{}exp_{}'.format(parser.model, 'debug_' if parser.debug else '', timestamp)
+    if not os.path.exists(exp_out_dir):
+        os.makedirs(exp_out_dir)
+
+    snapshots_folder = os.path.join(exp_out_dir, 'snapshots')
+    if not os.path.exists(snapshots_folder):
+        os.makedirs(snapshots_folder)
+
+    # Save train history
+    train_history_cols = ['epoch', 'train_c_loss', 'train_r_loss', 'running_loss']
+    train_csv_file_path = os.path.join(exp_out_dir, 'train_history.csv')
+    with open(train_csv_file_path, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(train_history_cols)
+
+    # Save eval history
+    eval_history_cols = ['epoch', 'label', 'eval_mAP', 'eval_precision', 'eval_recall']
+    eval_csv_file_path = os.path.join(exp_out_dir, 'eval_history.csv')
+    with open(eval_csv_file_path, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(eval_history_cols)
+
+    if parser.csv_train is None:
+        raise ValueError('Must provide --csv_train when training on CSV,')
 
     if parser.csv_classes is None:
         raise ValueError('Must provide --csv_classes when training on CSV,')
@@ -147,19 +178,22 @@ def main(args=None):
                     'Epoch: {} | Iteration: {} | Classification loss: {:1.5f} | Regression loss: {:1.5f} | Running loss: {:1.5f}'.format(
                         epoch_num, iter_num, float(classification_loss), float(regression_loss), np.mean(loss_hist)))
 
-                del classification_loss
-                del regression_loss
             except Exception as e:
                 print(e)
                 continue
 
-        torch.save(network.module, os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt'))
+        with open(train_csv_file_path, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([epoch_num, classification_loss.item(), regression_loss.item(), np.mean(loss_hist)])
+            # history_cols = ['epoch', 'train_c_loss', 'train_r_loss', 'running_loss']
+
+        torch.save(network.module, os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt'))
 
         if parser.csv_val is not None:
 
             print('Evaluating dataset')
 
-            mAP = csv_eval.evaluate(dataset_val, torch.load(os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt')))
+            mAP = csv_eval.evaluate(dataset_val, torch.load(os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt')), save_path=exp_out_dir, epoch=epoch_num, csv_file_path=eval_csv_file_path)
 
         scheduler.step(np.mean(epoch_loss))
 
