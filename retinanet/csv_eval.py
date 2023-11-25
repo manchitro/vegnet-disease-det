@@ -251,7 +251,7 @@ def evaluate(
             plt.title('Precision Recall curve') 
 
             # function to show the plot
-            plt.savefig(save_path+'/'+label_name+'_precision_recall.jpg')
+            plt.savefig(os.path.join(save_path, label_name+'_precision_recall.jpg'))
 
 
 
