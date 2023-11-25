@@ -153,15 +153,15 @@ def main(args=None):
                 print(e)
                 continue
 
+        torch.save(network.module, os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt'))
+
         if parser.csv_val is not None:
 
             print('Evaluating dataset')
 
-            mAP = csv_eval.evaluate(dataset_val, network)
+            mAP = csv_eval.evaluate(dataset_val, torch.load(os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt')))
 
         scheduler.step(np.mean(epoch_loss))
-
-        torch.save(network.module, os.path.join('snapshots', 'epoch_' + str(epoch_num) + '.pt'))
 
     network.eval()
 
