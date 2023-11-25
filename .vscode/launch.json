@@ -27,8 +27,8 @@
                 "--img_dir", "vegnet_images",
                 // "--model", "mobilenetv2",
                 "--model", "resnet18",
-                "--batchsize", "4"
-                // "--debug"
+                "--batchsize", "4",
+                "--debug"
             ]
         }
     ]
