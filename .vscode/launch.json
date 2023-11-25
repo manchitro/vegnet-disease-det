@@ -11,7 +11,7 @@
             "program": "csv_validation.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--csv_annotations_path", "small_vegnet_annotations/vegnet-annots-val.csv", "--model_path", "snapshots/first_run/epoch_2.pt", "--images_path", "vegnet_images/", "--class_list_path", "vegnet_annotations/labels.csv"]
+            "args": ["--csv_annotations_path", "small_vegnet_annotations/vegnet-annots-val.csv", "--model_path", "snapshots/epoch_1.pt", "--images_path", "vegnet_images/", "--class_list_path", "vegnet_annotations/labels.csv"]
         },
         {
             "name": "train.py",
