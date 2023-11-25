@@ -240,12 +240,12 @@ def evaluate(
     for label in range(generator.num_classes()):
         label_name = generator.label_to_name(label)
         print('{}: {}'.format(label_name, average_precisions[label][0]))
-        print("Precision: ",precision[-1] if precision else 'N/A')
-        print("Recall: ",recall[-1] if recall else 'N/A')
+        print("Precision: ",precision[-1] if len(precision) > 0 else 'N/A')
+        print("Recall: ",recall[-1] if len(recall) > 0 else 'N/A')
 
         with open(csv_file_path, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([epoch, label_name, average_precisions[label][0], precision[-1] if precision else 'N/A', recall[-1] if recall else 'N/A'])
+            writer.writerow([epoch, label_name, average_precisions[label][0], precision[-1] if len(precision) > 0 else 'N/A', recall[-1] if len(recall) > 0 else 'N/A'])
 			# eval_history_cols = ['epoch', 'label', 'eval_mAP', 'eval_precision', 'eval_recall']
         
         if save_path!=None:
