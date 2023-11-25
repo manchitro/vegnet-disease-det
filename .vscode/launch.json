@@ -5,7 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "csv_validation.py",
+            "type": "python",
+            "request": "launch",
+            "program": "csv_validation.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--csv_annotations_path", "small_vegnet_annotations/vegnet-annots-val.csv", "--model_path", "snapshots/first_run/epoch_2.pt", "--images_path", "vegnet_images/", "--class_list_path", "vegnet_annotations/labels.csv"]
+        },
+        {
+            "name": "train.py",
             "type": "python",
             "request": "launch",
             "program": "train.py",
@@ -18,7 +27,8 @@
                 "--img_dir", "vegnet_images",
                 // "--model", "mobilenetv2",
                 "--model", "resnet18",
-                "--batchsize", "4",
+                "--batchsize", "4"
+                // "--debug"
             ]
         }
     ]

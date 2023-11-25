@@ -34,10 +34,17 @@ def main(args=None):
     parser.add_argument('--epochs', help='Number of epochs', type=int, default=100)
     parser.add_argument('--batchsize', help='Batch size', type=int, default=2)
 
+    parser.add_argument('--debug', help='Debug mode', action='store_true')
+
     parser = parser.parse_args(args)
 
     if parser.csv_train is None:
         raise ValueError('Must provide --csv_train when training on CSV,')
+
+    if parser.debug:
+        print('Debug mode is on')
+        parser.csv_train = 'small_' + parser.csv_train
+        parser.csv_val = 'small_' + parser.csv_val
 
     if parser.csv_classes is None:
         raise ValueError('Must provide --csv_classes when training on CSV,')

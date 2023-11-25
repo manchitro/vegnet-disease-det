@@ -1,12 +1,13 @@
 import argparse
 import torch
 from torchvision import transforms
+from retinanet import csv_eval
 
-from retinanet import model
+# from retinanet import model
 from retinanet.dataloader import CSVDataset, Resizer, Normalizer
 from retinanet import csv_eval
 
-assert torch.__version__.split('.')[0] == '1'
+# assert torch.__version__.split('.')[0] == '1'
 
 print('CUDA available: {}'.format(torch.cuda.is_available()))
 
@@ -21,7 +22,7 @@ def main(args=None):
     parser.add_argument('--iou_threshold',help='IOU threshold used for evaluation',type=str, default='0.5')
     parser = parser.parse_args(args)
 
-    dataset_val = CSVDataset(parser.csv_annotations_path,parser.class_list_path,transform=transforms.Compose([Normalizer(), Resizer()]))
+    dataset_val = CSVDataset(parser.images_path, parser.csv_annotations_path, parser.class_list_path, transform=transforms.Compose([Normalizer(), Resizer()]))
     # Create the model
     #retinanet = model.resnet50(num_classes=dataset_val.num_classes(), pretrained=True)
     retinanet=torch.load(parser.model_path)
@@ -41,9 +42,9 @@ def main(args=None):
 
     retinanet.training = False
     retinanet.eval()
-    retinanet.module.freeze_bn()
+    # retinanet.module.freeze_bn()
 
-    print(csv_eval.evaluate(dataset_val, retinanet,iou_threshold=float(parser.iou_threshold)))
+    print(csv_eval.evaluate(dataset_val, retinanet, iou_threshold=float(parser.iou_threshold), save_path='./out/'))
 
 
 
