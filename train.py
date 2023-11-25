@@ -49,7 +49,7 @@ def main(args=None):
         os.makedirs('out')
 
     current_time = datetime.datetime.now()
-    time_string = current_time.strftime("%Y-%m-%d_%H:%M:%S")
+    time_string = current_time.strftime("%Y-%m-%d_%H-%M-%S")
     timestamp = str(time_string)
 
     exp_out_dir = 'out/{}_{}exp_{}'.format(parser.model, 'debug_' if parser.debug else '', timestamp)

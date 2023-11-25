@@ -29,7 +29,7 @@ def main(args=None):
         os.makedirs('out')
 
     current_time = datetime.datetime.now()
-    time_string = current_time.strftime("%Y-%m-%d_%H:%M:%S")
+    time_string = current_time.strftime("%Y-%m-%d_%H-%M-%S")
     timestamp = str(time_string)
 
     val_out_dir = 'out/{}_val_{}'.format(parser.model, timestamp)
