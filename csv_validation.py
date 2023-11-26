@@ -32,7 +32,7 @@ def main(args=None):
     time_string = current_time.strftime("%Y-%m-%d_%H-%M-%S")
     timestamp = str(time_string)
 
-    val_out_dir = 'out/{}_val_{}'.format(parser.model, timestamp)
+    val_out_dir = 'out/val_{}'.format(timestamp)
     if not os.path.exists(val_out_dir):
         os.makedirs(val_out_dir)
 

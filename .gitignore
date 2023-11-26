@@ -110,3 +110,6 @@ ENV/
 
 # dolphin FM cache
 .directory
+
+# exp history
+out/

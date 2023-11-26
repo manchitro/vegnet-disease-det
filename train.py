@@ -14,6 +14,7 @@ from torchvision import transforms
 from retinanet import mobilenetv2fpn, resnetsfpn, train_metrics
 from retinanet.dataloader import CSVDataset, collater, Resizer, AspectRatioBasedSampler, Augmenter, \
     Normalizer
+from retinanet.visualize_single_image import detect_image
 from torch.utils.data import DataLoader
 
 from retinanet import csv_eval
@@ -67,11 +68,11 @@ def main(args=None):
         writer = csv.writer(file)
         writer.writerow(train_history_cols)
 
-    train_metrics_history_cols = ['epoch', 'label', 'tp', 'fp', 'eval_mAP', 'eval_precision', 'eval_recall']
-    train_metrics_csv_file_path = os.path.join(exp_out_dir, 'train_metric_history.csv')
-    with open(train_metrics_csv_file_path, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(train_metrics_history_cols)
+    # train_metrics_history_cols = ['epoch', 'label', 'tp', 'fp', 'eval_mAP', 'eval_precision', 'eval_recall']
+    # train_metrics_csv_file_path = os.path.join(exp_out_dir, 'train_metric_history.csv')
+    # with open(train_metrics_csv_file_path, 'w', newline='') as file:
+    #     writer = csv.writer(file)
+    #     writer.writerow(train_metrics_history_cols)
     # eval_history_cols = ['epoch', 'label', 'tp', 'fp', 'eval_mAP', 'eval_precision', 'eval_recall']
 
     # Save eval history
@@ -189,9 +190,14 @@ def main(args=None):
                 print(e)
                 continue
 
-        torch.save(network.module, os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt'))
+        snapshot_path = os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt')
+        torch.save(network.module, snapshot_path)
 
         # train_mAP = train_metrics.evaluate(dataset_train, torch.load(os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt')), save_path=exp_out_dir, epoch=epoch_num, csv_file_path=train_metrics_csv_file_path)
+        # network.training = False
+        # network.eval()
+
+        # detect_image(image_path=os.path.join(parser.img_dir, 'vis_test_train'), model=network, class_list=parser.csv_classes, exp_out_dir=exp_out_dir)
         
         with open(train_csv_file_path, 'a', newline='') as file:
             writer = csv.writer(file)
@@ -203,6 +209,8 @@ def main(args=None):
             print('Evaluating dataset')
 
             mAP = csv_eval.evaluate(dataset_val, torch.load(os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt')), save_path=exp_out_dir, epoch=epoch_num, csv_file_path=eval_csv_file_path)
+
+            # detect_image(image_path=os.path.join(parser.image_dir, 'vis_test_val'), model=network, class_list=parser.csv_classes, exp_out_dir=exp_out_dir)
 
         scheduler.step(np.mean(epoch_loss))
 
