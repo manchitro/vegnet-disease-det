@@ -210,7 +210,7 @@ def main(args=None):
 
             mAP = csv_eval.evaluate(dataset_val, torch.load(os.path.join(snapshots_folder, 'epoch_' + str(epoch_num) + '.pt')), save_path=exp_out_dir, epoch=epoch_num, csv_file_path=eval_csv_file_path)
 
-            detect_image(image_path=os.path.join(parser.image_dir, 'vis_test_val'), model=network, class_list=parser.csv_classes, exp_out_dir=exp_out_dir)
+            detect_image(image_path=os.path.join(parser.img_dir, 'vis_test_val'), model=network, class_list=parser.csv_classes, exp_out_dir=exp_out_dir)
 
         scheduler.step(np.mean(epoch_loss))
 
