@@ -31,8 +31,9 @@
                 "--csv_val", "vegnet_annotations/vegnet-annots-val.csv",
                 "--img_dir", "vegnet_images",
                 // "--model", "mobilenetv2",
-                "--model", "resnet18",
-                "--batchsize", "4",
+                "--model", "mobilenetv2mini",
+                // "--model", "resnet18",
+                "--batchsize", "1",
                 "--debug"
             ]
         }

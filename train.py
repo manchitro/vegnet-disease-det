@@ -118,6 +118,8 @@ def main(args=None):
         network = resnetsfpn.resnet152(num_classes=dataset_train.num_classes(), pretrained=True)
     elif parser.model == 'mobilenetv2':
         network = mobilenetv2fpn.mobilenetv2FPN(num_classes=dataset_train.num_classes(), pretrained=False)
+    elif parser.model == 'mobilenetv2mini':
+        network = mobilenetv2fpn.mobilenetminiFPN(num_classes=dataset_train.num_classes(), pretrained=True)
     else:
         raise ValueError('Unsupported model, must be one of resnet 18, 34, 50, 101, 152 or mobilenetv2')
 
