@@ -1,0 +1,43 @@
+for x in lateral_tensors:
+	print(x.shape)
+torch.Size([1, 256, 160, 208])
+torch.Size([1, 256, 80, 104])
+torch.Size([1, 256, 40, 52])
+
+img_batch.shape:  torch.Size([1, 3, 640, 832])
+----------------------------------------------------
+img_batch.shape:  torch.Size([1, 3, 640, 704])
+feature.shape:  torch.Size([1, 256, 80, 88])
+feature.shape:  torch.Size([1, 256, 40, 44])
+feature.shape:  torch.Size([1, 256, 20, 22])
+feature.shape:  torch.Size([1, 256, 10, 11])
+feature.shape:  torch.Size([1, 256, 5, 6])
+regression.shape:  torch.Size([1, 84420, 4])
+classification.shape:  torch.Size([1, 84420, 3])
+anchors.shape:  torch.Size([1, 337590, 4])
+
+
+mobile mini
+=====================================================
+
+for x in [x2, x3, x4]:
+	print(x.shape)
+torch.Size([1, 128, 80, 104])
+torch.Size([1, 256, 40, 52])
+torch.Size([1, 512, 20, 26])
+
+img_batch.shape:  torch.Size([1, 3, 640, 832])
+-----------------------------------------------------
+img_batch.shape:  torch.Size([1, 3, 832, 640])
+feature.shape:  torch.Size([1, 256, 104, 80])
+feature.shape:  torch.Size([1, 256, 52, 40])
+feature.shape:  torch.Size([1, 256, 26, 20])
+feature.shape:  torch.Size([1, 256, 13, 10])
+feature.shape:  torch.Size([1, 256, 7, 5])
+regression.shape:  torch.Size([1, 99765, 4])
+classification.shape:  torch.Size([1, 99765, 3])
+anchors.shape:  torch.Size([1, 99765, 4])
+
+
+resnet
+=====================================================
