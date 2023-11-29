@@ -105,8 +105,8 @@ ENV/
 *.partial
 
 # images
-*.jpg
-*.jpeg
+# *.jpg
+# *.jpeg
 
 # dolphin FM cache
 .directory
@@ -117,3 +117,4 @@ out/
 pothole*
 
 vegnet_images/
+datasets/
