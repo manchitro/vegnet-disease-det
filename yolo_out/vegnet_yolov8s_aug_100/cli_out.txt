@@ -1,0 +1,182 @@
+Ultralytics YOLOv8.0.218 🚀 Python-3.11.4 torch-2.1.0+cu121 CUDA:0 (NVIDIA GeForce GTX 1650 with Max-Q Design, 3904MiB)
+Model summary (fused): 168 layers, 11126745 parameters, 0 gradients, 28.4 GFLOPs
+
+image 1/4 /home/s/repo/vegnet-disease-det/yolo/../datasets/vegnet/vis_test_val/Bacterial Spot. (149).jpg: 384x512 3 Bacterial Spot Rots, 62.8ms
+image 2/4 /home/s/repo/vegnet-disease-det/yolo/../datasets/vegnet/vis_test_val/Black Rot(13).jpeg: 384x512 1 Black Rot, 12.0ms
+image 3/4 /home/s/repo/vegnet-disease-det/yolo/../datasets/vegnet/vis_test_val/Black Rot(13).jpg: 384x512 1 Black Rot, 12.1ms
+image 4/4 /home/s/repo/vegnet-disease-det/yolo/../datasets/vegnet/vis_test_val/No disease. (103).jpg: 512x384 (no detections), 56.6ms
+Speed: 2.1ms preprocess, 35.9ms inference, 2.0ms postprocess per image at shape (1, 3, 512, 384)
+Results saved to /home/s/repo/vegnet-disease-det/runs/detect/predict
+💡 Learn more at https://docs.ultralytics.com/modes/predict
+
+
+[notice] A new release of pip is available: 23.2.1 -> 23.3.1
+[notice] To update, run: pip install --upgrade pip
+
+[notice] A new release of pip is available: 23.2.1 -> 23.3.1
+[notice] To update, run: pip install --upgrade pip
+
+[notice] A new release of pip is available: 23.2.1 -> 23.3.1
+[notice] To update, run: pip install --upgrade pip
+New https://pypi.org/project/ultralytics/8.0.220 available 😃 Update with 'pip install -U ultralytics'
+Ultralytics YOLOv8.0.218 🚀 Python-3.11.4 torch-2.1.0+cu121 CUDA:0 (NVIDIA GeForce GTX 1650 with Max-Q Design, 3904MiB)
+engine/trainer: task=detect, mode=train, model=yolov8s.pt, data=vegnet_yolo.yaml, epochs=100, patience=10, batch=8, imgsz=512, save=True, save_period=5, cache=False, device=0, workers=8, project=../yolo_out, name=vegnet_yolov8s_aug_100, exist_ok=False, pretrained=True, optimizer=Adam, verbose=True, seed=0, deterministic=True, single_cls=False, rect=False, cos_lr=False, close_mosaic=10, resume=False, amp=False, fraction=1.0, profile=False, freeze=None, overlap_mask=True, mask_ratio=4, dropout=0.0, val=True, split=val, save_json=False, save_hybrid=False, conf=None, iou=0.7, max_det=300, half=False, dnn=False, plots=True, source=None, vid_stride=1, stream_buffer=False, visualize=False, augment=False, agnostic_nms=False, classes=None, retina_masks=False, show=True, save_txt=False, save_conf=False, save_crop=False, show_labels=True, show_conf=True, show_boxes=True, line_width=None, format=torchscript, keras=False, optimize=True, int8=False, dynamic=False, simplify=False, opset=None, workspace=4, nms=False, lr0=0.001, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=7.5, cls=0.5, dfl=1.5, pose=12.0, kobj=1.0, label_smoothing=0.0, nbs=64, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.0, mosaic=1.0, mixup=0.0, copy_paste=0.0, cfg=None, tracker=botsort.yaml, save_dir=../yolo_out/vegnet_yolov8s_aug_100
+Overriding model.yaml nc=80 with nc=3
+
+                   from  n    params  module                                       arguments                     
+  0                  -1  1       928  ultralytics.nn.modules.conv.Conv             [3, 32, 3, 2]                 
+  1                  -1  1     18560  ultralytics.nn.modules.conv.Conv             [32, 64, 3, 2]                
+  2                  -1  1     29056  ultralytics.nn.modules.block.C2f             [64, 64, 1, True]             
+  3                  -1  1     73984  ultralytics.nn.modules.conv.Conv             [64, 128, 3, 2]               
+  4                  -1  2    197632  ultralytics.nn.modules.block.C2f             [128, 128, 2, True]           
+  5                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]              
+  6                  -1  2    788480  ultralytics.nn.modules.block.C2f             [256, 256, 2, True]           
+  7                  -1  1   1180672  ultralytics.nn.modules.conv.Conv             [256, 512, 3, 2]              
+  8                  -1  1   1838080  ultralytics.nn.modules.block.C2f             [512, 512, 1, True]           
+  9                  -1  1    656896  ultralytics.nn.modules.block.SPPF            [512, 512, 5]                 
+ 10                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 11             [-1, 6]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 12                  -1  1    591360  ultralytics.nn.modules.block.C2f             [768, 256, 1]                 
+ 13                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 14             [-1, 4]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 15                  -1  1    148224  ultralytics.nn.modules.block.C2f             [384, 128, 1]                 
+ 16                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
+ 17            [-1, 12]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 18                  -1  1    493056  ultralytics.nn.modules.block.C2f             [384, 256, 1]                 
+ 19                  -1  1    590336  ultralytics.nn.modules.conv.Conv             [256, 256, 3, 2]              
+ 20             [-1, 9]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 21                  -1  1   1969152  ultralytics.nn.modules.block.C2f             [768, 512, 1]                 
+ 22        [15, 18, 21]  1   2117209  ultralytics.nn.modules.head.Detect           [3, [128, 256, 512]]          
+Model summary: 225 layers, 11136761 parameters, 11136745 gradients, 28.7 GFLOPs
+
+Transferred 349/355 items from pretrained weights
+TensorBoard: Start with 'tensorboard --logdir ../yolo_out/vegnet_yolov8s_aug_100', view at http://localhost:6006/
+Freezing layer 'model.22.dfl.conv.weight'
+train: Scanning /home/s/repo/vegnet-disease-det/datasets/vegnet/labels/train... 
+train: New cache created: /home/s/repo/vegnet-disease-det/datasets/vegnet/labels/train.cache
+albumentations: Blur(p=0.01, blur_limit=(3, 7)), MedianBlur(p=0.01, blur_limit=(3, 7)), ToGray(p=0.01), CLAHE(p=0.01, clip_limit=(1, 4.0), tile_grid_size=(8, 8))
+val: Scanning /home/s/repo/vegnet-disease-det/datasets/vegnet/labels/val.cache..
+Plotting labels to ../yolo_out/vegnet_yolov8s_aug_100/labels.jpg... 
+optimizer: Adam(lr=0.001, momentum=0.937) with parameter groups 57 weight(decay=0.0), 64 weight(decay=0.0005), 63 bias(decay=0.0)
+Image sizes 512 train, 512 val
+Using 8 dataloader workers
+Logging results to ../yolo_out/vegnet_yolov8s_aug_100
+Starting training for 100 epochs...
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      1/100      2.59G      2.062      2.934      2.088         13        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.133       0.22     0.0523     0.0237
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      2/100       2.6G      1.928      2.471      1.984         14        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.142      0.281     0.0923     0.0346
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      3/100      2.19G      1.928      2.314      1.986         25        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.332      0.152     0.0956     0.0473
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      4/100      2.75G      1.876      2.278      1.966         22        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.225      0.256       0.13     0.0571
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      5/100      2.75G      1.857      2.223      1.916          7        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.402      0.251       0.13     0.0576
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      6/100      2.75G      1.761      2.076      1.859          8        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.152      0.348     0.0954     0.0409
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      7/100       2.5G      1.747      2.002      1.835         14        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.363      0.288      0.196      0.079
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      8/100      2.75G      1.715      1.922      1.813         17        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.274      0.331      0.152     0.0713
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      9/100       2.7G      1.689      1.949      1.815         17        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.321      0.322      0.165     0.0771
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     10/100      2.05G      1.633      1.752      1.725         23        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.405      0.286      0.252       0.11
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     11/100       2.7G      1.667      1.804      1.774         14        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.325      0.293      0.184     0.0815
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     12/100      2.73G      1.601      1.756      1.726         11        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.253      0.363      0.168     0.0766
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     13/100      2.72G      1.571      1.717      1.704         16        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.303      0.332      0.181     0.0923
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     14/100      2.76G      1.534      1.631      1.655         17        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.276      0.289      0.156     0.0755
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     15/100       2.7G      1.549      1.635      1.666          1        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.391      0.317       0.21     0.0985
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     16/100       2.6G      1.513      1.598      1.642         15        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.282      0.322      0.172     0.0782
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     17/100      2.75G      1.495      1.507      1.616         14        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.305      0.339      0.195     0.0944
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     18/100      2.75G      1.451      1.434      1.589         20        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.254      0.252      0.155     0.0727
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     19/100      2.58G      1.454       1.43      1.592          8        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188       0.31      0.318      0.169      0.083
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+     20/100      2.75G      1.457       1.43      1.595         26        512: 1
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.368      0.269        0.2     0.0897
+Stopping training early as no improvement observed in last 10 epochs. Best results observed at epoch 10, best model saved as best.pt.
+To update EarlyStopping(patience=10) pass a new patience value, i.e. `patience=300` or use `patience=0` to disable EarlyStopping.
+
+20 epochs completed in 0.338 hours.
+Optimizer stripped from ../yolo_out/vegnet_yolov8s_aug_100/weights/last.pt, 22.5MB
+Optimizer stripped from ../yolo_out/vegnet_yolov8s_aug_100/weights/best.pt, 22.5MB
+
+Validating ../yolo_out/vegnet_yolov8s_aug_100/weights/best.pt...
+Ultralytics YOLOv8.0.218 🚀 Python-3.11.4 torch-2.1.0+cu121 CUDA:0 (NVIDIA GeForce GTX 1650 with Max-Q Design, 3904MiB)
+Model summary (fused): 168 layers, 11126745 parameters, 0 gradients, 28.4 GFLOPs
+                 Class     Images  Instances      Box(P          R      mAP50  m
+                   all         98        188      0.399      0.297      0.252       0.11
+         Downey Mildew         98         83      0.634      0.188      0.223      0.107
+             Black Rot         98         47      0.232       0.34      0.203     0.0955
+    Bacterial Spot Rot         98         58      0.331      0.362      0.331      0.128
+Speed: 0.5ms preprocess, 34.3ms inference, 0.0ms loss, 1.9ms postprocess per image
+Results saved to ../yolo_out/vegnet_yolov8s_aug_100
+💡 Learn more at https://docs.ultralytics.com/modes/train
