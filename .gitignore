@@ -113,8 +113,8 @@ ENV/
 
 # exp history
 out/
-
+out_old/
 pothole*
-
+yolo/runs/
 vegnet_images/
 datasets/
