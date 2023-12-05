@@ -6,11 +6,12 @@
     "configurations": [
         { 
             "name": "yolo_mod", 
-            "type": "python", 
-            "request": "launch", 
-            "program": "yolo/yolov8_mod.py", 
-            "console": "integratedTerminal", 
-            "justMyCode": false 
+			"type": "python", 
+			"request": "launch", 
+			"program": "yolov8_mod.py", 
+			"console": "integratedTerminal", 
+			"justMyCode": false,
+			"cwd": "/home/s/repo/vegnet-disease-det/yolo"
         },
         {
             "name": "csv_validation.py",
