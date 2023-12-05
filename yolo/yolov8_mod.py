@@ -1,6 +1,5 @@
 # %%
 from ultralytics import YOLO
-import hiddenlayer as hl
 import os
 
 print(os.getcwd())
