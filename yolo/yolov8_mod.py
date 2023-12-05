@@ -4,9 +4,9 @@ import hiddenlayer as hl
 import os
 
 print(os.getcwd())
-model_name = 'yolov8l'
-exp_name = 'original_from_pt'
-model = YOLO('yolov8.yaml')
+model_name = 'yolov8n'
+exp_name = 'original_pt'
+model = YOLO(f'./{model_name}.yaml')
 model.load(f'{model_name}.pt')  # build from YAML and transfer weights
 # print(model)
 
@@ -35,7 +35,7 @@ results = model.train(
 )
 
 print(results)
-path = model.export(format="onnx")  # export the model to ONNX format
-print(path)
+# path = model.export(format="onnx")  # export the model to ONNX format
+# print(path)
 
 

@@ -118,3 +118,4 @@ pothole*
 yolo/runs/
 vegnet_images/
 datasets/
+*.onnx
