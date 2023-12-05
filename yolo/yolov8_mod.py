@@ -4,10 +4,10 @@ import hiddenlayer as hl
 import os
 
 print(os.getcwd())
-model_name = 'yolov8s'
+model_name = 'yolov8l'
 exp_name = 'original_from_pt'
-model = YOLO(f'./{model_name}.yaml')
-model.load(f'./{model_name}.pt')  # build from YAML and transfer weights
+model = YOLO('yolov8.yaml')
+model.load(f'{model_name}.pt')  # build from YAML and transfer weights
 # print(model)
 
 results = model.train(
