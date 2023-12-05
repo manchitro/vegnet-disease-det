@@ -4,6 +4,14 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        { 
+            "name": "yolo_mod", 
+            "type": "python", 
+            "request": "launch", 
+            "program": "yolo/yolov8_mod.py", 
+            "console": "integratedTerminal", 
+            "justMyCode": false 
+        },
         {
             "name": "csv_validation.py",
             "type": "python",
@@ -11,12 +19,7 @@
             "program": "csv_validation.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": [
-				"--csv_annotations_path", "small_vegnet_annotations/vegnet-annots-val.csv", 
-				"--model_path", "snapshots/epoch_1.pt", 
-				"--images_path", "vegnet_images/", 
-				"--class_list_path", "vegnet_annotations/labels.csv"
-			]
+            "args": ["--csv_annotations_path", "small_vegnet_annotations/vegnet-annots-val.csv", "--model_path", "snapshots/epoch_1.pt", "--images_path", "vegnet_images/", "--class_list_path", "vegnet_annotations/labels.csv"]
         },
         {
             "name": "train.py",
@@ -26,14 +29,20 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "--csv_classes", "vegnet_annotations/labels.csv",
-                "--csv_train", "vegnet_annotations/vegnet-annots-train.csv",
-                "--csv_val", "vegnet_annotations/vegnet-annots-val.csv",
-                "--img_dir", "vegnet_images",
+                "--csv_classes",
+                "vegnet_annotations/labels.csv",
+                "--csv_train",
+                "vegnet_annotations/vegnet-annots-train.csv",
+                "--csv_val",
+                "vegnet_annotations/vegnet-annots-val.csv",
+                "--img_dir",
+                "vegnet_images",
                 // "--model", "mobilenetv2",
-                "--model", "mobilenetv2mini",
+                "--model",
+                "mobilenetv2mini",
                 // "--model", "resnet18",
-                "--batchsize", "1",
+                "--batchsize",
+                "1",
                 "--debug"
             ]
         }
