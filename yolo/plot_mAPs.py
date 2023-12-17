@@ -10,10 +10,11 @@ def list_subdirectories(directories):
             subdirs.extend([os.path.join(directory, d) for d in os.listdir(directory) if os.path.isdir(os.path.join(directory, d))])
     return subdirs
 
-directories = ['../yolo_out', '../vegnet_yolo_out']
+directories = ['../vegnet_yolo_out']
+# directories = ['../yolo_out', '../vegnet_yolo_out']
 all_subdirs = list_subdirectories(directories)
-for subdir in all_subdirs:
-    print(subdir)
+all_subdirs.sort()
+# all_subdirs = all_subdirs[0:7] + all_subdirs[9:]
 # print(all_subdirs)
 # List of csv files
 # experiment_names = ['vegnet_yolov8s_original_dataset', 
@@ -30,16 +31,18 @@ csv_files = [os.path.join(exp, 'results.csv') for exp in all_subdirs]
 
 # Plotting the mAP progression for each csv file
 fig, ax = plt.subplots(figsize=(10, 6))
+i = 0
 for file, label in zip(csv_files, all_subdirs):
     label = os.path.basename(label)
     df = pd.read_csv(file)
     mAP_values = df[df.columns[6]].tolist()
     max_mAP = max(mAP_values)
     idx_max = mAP_values.index(max_mAP)
-    plt.plot(mAP_values, label=label)
+    plt.plot(mAP_values, label=f"{i}_{label}")
+    plt.ylim(0.0, 1.0)
     plt.annotate(
         # f"{label}\nMax mAP: {max_mAP:.2f}\nEpoch: {idx_max}",
-        f"{max_mAP:.2f}",
+        f"{i}_{max_mAP:.2f}",
         xy=(idx_max, max_mAP),
         xycoords="data",
         xytext=(0, 20),
@@ -48,6 +51,7 @@ for file, label in zip(csv_files, all_subdirs):
         bbox=dict(boxstyle="round,pad=0.3", edgecolor="blue", facecolor="white"),
         fontsize=12,
     )
+    i += 1
     
 
 plt.xlabel('Epoch')
@@ -57,3 +61,8 @@ plt.title('mAP Progression Comparison')
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.show()
 
+
+all_subdirs = list_subdirectories(directories)
+all_subdirs.sort()
+for i, subdir in enumerate(all_subdirs):
+    print(i, subdir)
